@@ -8,6 +8,7 @@ import TopBar from "./components/TopBar";
 import UserDetail from "./components/UserDetail";
 import UserList from "./components/UserList";
 import UserPhotos from "./components/UserPhotos";
+import Login from "./components/Login";
 
 const App = (props) => {
   return (
@@ -29,6 +30,7 @@ const App = (props) => {
                 <Route path="/users/:userId" element={<UserDetail />} />
                 <Route path="/photos/:userId" element={<UserPhotos />} />
                 <Route path="/users" element={<UserList />} />
+                <Route path="/login" element={<Login />} />
               </Routes>
             </Paper>
           </Grid>
