@@ -8,23 +8,36 @@ import {
 } from "@mui/material";
 
 import "./styles.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../../services/UserService";
+import { getAllUsers, getUserByJwt } from "../../services/UserService";
+import { useSelector } from "react-redux";
 
 function UserList() {
+  const login = useSelector(state => state.login);
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-
-  const getListUser = async () => {
-    const result = await getAllUsers();
-    if (result) {
-      setUsers(result);
-    }
-  }
+  const [userJwt, setUserJwt] = useState(null);
 
   useEffect(() => {
+    const getUserJwt = async () => {
+      const result = await getUserByJwt();
+      setUserJwt(result);
+    }
+    getUserJwt();
+  }, [login]);
+
+  useEffect(() => {
+    const getListUser = async () => {
+      const result = await getAllUsers();
+      if (result.error) {
+        navigate("/login");
+      } else {
+        setUsers(result);
+      }
+    }
     getListUser();
-  }, []);
+  }, [login]);
 
   return (
     <div>
@@ -36,7 +49,7 @@ function UserList() {
               button
               component={Link}
               to={`/users/${item._id}`}>
-              <ListItemText primary={`${item.last_name}`} />
+              <ListItemText primary={(userJwt && item._id === userJwt._id) ? `${item.first_name} ${item.last_name} (Me)` : `${item.first_name} ${item.last_name}`} />
             </ListItem>
             <Divider />
           </div>

@@ -14,3 +14,10 @@ export const getUserByID = async (userID) => {
         return result;
     }
 }
+
+export const getUserByJwt = async () => {
+    const result = await get(`${prefixUser}/jwt`);
+    if (result) {
+        return result;
+    }
+}

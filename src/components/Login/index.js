@@ -1,50 +1,54 @@
 import React, { useState } from 'react';
 import "./styles.css";
+import { useNavigate, Link } from 'react-router-dom'; // Thêm import Link từ 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { login } from '../../actions/Login';
 import { postLogin } from '../../services/AuthServices';
 
 const LoginForm = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const Login = async (un, pw) => {
-        const res = await postLogin({ username: un, password: pw });
-
-        if (res) {
-            console.log(res);
-        } else {
-            console.log("0");
-        }
-    }
-
-    const handleSubmit = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault();
-        Login(username, password);
+        const res = await postLogin({ username, password });
+        if (res.message === 'Login success') {
+            dispatch(login());
+            navigate("/");
+        } else {
+            alert("Login fail!");
+        }
     };
 
     return (
-        <form className="login-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    value={username}
-                    onChange={(event) => setUsername(event.target.value)}
-                    className="form-control"
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    className="form-control"
-                />
-            </div>
-            <button type="submit" className="btn btn-primary">Login</button>
-        </form>
+        <div className='custom-form'>
+            <form className="custom-login-form" onSubmit={handleLogin}>
+                <div className="custom-form-group">
+                    <label htmlFor="username">Username:</label>
+                    <input
+                        type="text"
+                        id="username"
+                        value={username}
+                        onChange={(event) => setUsername(event.target.value)}
+                        className="custom-form-control"
+                    />
+                </div>
+                <div className="custom-form-group">
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        className="custom-form-control"
+                    />
+                </div>
+                <button type="submit" className="custom-btn custom-btn-primary">Login</button>
+                <Link to="/register" className="custom-link">Register</Link>
+            </form>
+        </div>
     );
 };
 

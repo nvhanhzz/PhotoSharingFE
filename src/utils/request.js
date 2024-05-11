@@ -1,42 +1,49 @@
+import axios from 'axios';
+
 const DOMAIN = "http://localhost:8081/";
 
+const axiosInstance = axios.create({
+    baseURL: DOMAIN,
+    withCredentials: true
+});
+
 export const get = async (path) => {
-    const response = await fetch(DOMAIN + path);
-    const result = await response.json();
-    return result;
+    try {
+        const response = await axiosInstance.get(path);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
 }
 
 export const post = async (path, option) => {
-    const response = await fetch(DOMAIN + path, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(option)
-    });
-
-    const result = await response.json();
-    return result;
+    try {
+        const response = await axiosInstance.post(path, option);
+        console.log(DOMAIN + path);
+        return response.data;
+    } catch (error) {
+        console.error("Error posting data:", error);
+        throw error;
+    }
 }
 
 export const patch = async (path, option) => {
-    const response = await fetch(DOMAIN + path, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(option)
-    });
-
-    const result = await response.json();
-    return result;
+    try {
+        const response = await axiosInstance.patch(path, option);
+        return response.data;
+    } catch (error) {
+        console.error("Error patching data:", error);
+        throw error;
+    }
 }
 
-export const Delete = async (path) => {
-    const response = await fetch(DOMAIN + path, {
-        method: "DELETE"
-    });
-
-    const result = await response.json();
-    return result;
+export const del = async (path) => {
+    try {
+        const response = await axiosInstance.delete(path);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting data:", error);
+        throw error;
+    }
 }

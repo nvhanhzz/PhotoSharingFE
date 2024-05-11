@@ -8,19 +8,17 @@ import { getPhotosOfUser } from "../../services/PhotoService";
 function UserPhotos() {
   const { userId } = useParams();
   const [photos, setPhotos] = useState([]);
-
-  const getUserPhoto = async (userID) => {
-    const result = await getPhotosOfUser(userID);
-
-    if (result) {
-      console.log(result);
-      setPhotos(result);
-    }
-
-    return result;
-  }
-
   useEffect(() => {
+    const getUserPhoto = async (userID) => {
+      const result = await getPhotosOfUser(userID);
+
+      if (result) {
+        console.log(result);
+        setPhotos(result);
+      }
+
+      return result;
+    }
     getUserPhoto(userId);
   }, [userId]);
 
