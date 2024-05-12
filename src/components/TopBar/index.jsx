@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { getUserByID, getUserByJwt } from "../../services/UserService";
 import { useDispatch, useSelector } from 'react-redux';
 import "./styles.css";
 import { postLogout } from "../../services/AuthServices";
 import { logout } from "../../actions/Login";
+import { useNavigate } from "react-router-dom";
 
 function TopBar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [userJwt, setUserJwt] = useState("Please login !");
   const [user, setUser] = useState();
@@ -57,11 +59,15 @@ function TopBar() {
     Logout();
   };
 
+  const handleNavigate = () => {
+    navigate("/");
+  }
+
   return (
     <AppBar position="static">
       <Toolbar className="toolbar">
         <Typography variant="h6" >
-          {userJwt}
+          <Button color="inherit" onClick={handleNavigate}>{userJwt}</Button>
         </Typography>
         <Typography variant="h6">
           {/* {context !== "undefined undefined" ? context : ""} */}
