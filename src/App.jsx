@@ -20,6 +20,7 @@ const App = () => {
     const getUserJwt = async () => {
       const result = await getUserByJwt();
       setUserJwt(result);
+      // console.log(login, result);
     }
     getUserJwt();
   }, [login]);
@@ -52,7 +53,7 @@ const App = () => {
             <>
               <Routes>
                 <Route path="/register" element={<RegisterForm />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Login />} />
               </Routes>
             </>
           )}

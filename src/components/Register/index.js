@@ -24,7 +24,7 @@ const RegisterForm = () => {
         const res = await postRegister({ username, password, firstname, lastname, location, occupation });
         if (res.message === 'User registered successfully') {
             alert("Register success !");
-            navigate("/login");
+            navigate("/");
         } else if (res.message === 'Username already exists') {
             alert("Username already exists !");
         } else {

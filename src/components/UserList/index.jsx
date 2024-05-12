@@ -31,7 +31,7 @@ function UserList() {
     const getListUser = async () => {
       const result = await getAllUsers();
       if (result.error) {
-        navigate("/login");
+        navigate("/");
       } else {
         setUsers(result);
       }
