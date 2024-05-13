@@ -8,6 +8,13 @@ export const getPhotosOfUser = async (userID) => {
     }
 }
 
+export const getPhotoById = async (photoId) => {
+    const result = await get(`${prefixPhoto}/${photoId}`);
+    if (result) {
+        return result;
+    }
+}
+
 export const postNewPhoto = async (option) => {
     const result = await postFile(`${prefixPhoto}/new`, option);
     if (result) {

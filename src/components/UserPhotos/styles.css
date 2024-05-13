@@ -1,39 +1,36 @@
-.photo {
-  width: 100%;
-  border: 2px solid #ddd;
+/* styles.css */
+
+.photo-box {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.photo-box .comment-box {
+  width: 60%;
+}
+
+/* 
+.photo {
+  border: 2px solid #ddd;
+  margin-bottom: 20px;
 }
 
 .photo .content {
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 10px;
 }
 
 .photo .content i {
   display: block;
-  margin: 20px;
-}
-
-.photo .content .image {
-  width: 80%;
+  margin-bottom: 10px;
+  font-style: italic;
 }
 
 .photo .content .image img {
   width: 100%;
+  height: auto;
 }
 
-.photo .comments {
-  width: 60%;
-}
-
-.comments .comments__header a {
-  margin-right: 20px;
-  text-decoration: none;
-  color: #000;
-  font-size: 17px;
-  font-weight: 600;
-}
+.comment-box {
+  margin-top: 10px;
+} */

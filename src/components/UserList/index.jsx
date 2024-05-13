@@ -24,7 +24,7 @@ function UserList() {
       const result = await getUserByJwt();
       const json = await result.json();
       if (result.status === 200) {
-        setUserJwt(result.data);
+        setUserJwt(json);
       } else {
         // console.error(result.status);
       }

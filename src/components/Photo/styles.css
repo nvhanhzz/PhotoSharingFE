@@ -1,0 +1,27 @@
+.photo {
+    width: 40%;
+    border: 2px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.photo .content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.photo .content i {
+    display: block;
+    margin: 20px;
+}
+
+.photo .content .image {
+    width: 80%;
+}
+
+.photo .content .image img {
+    width: 100%;
+}

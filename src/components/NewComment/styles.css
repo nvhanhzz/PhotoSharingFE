@@ -1,0 +1,42 @@
+.new-comment {
+    width: 300px;
+    margin-left: 30px;
+    display: block;
+}
+
+.new-comment form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* height: 100px; */
+}
+
+.new-comment textarea {
+    height: 100%;
+    flex: 1;
+    resize: none;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow-y: auto;
+    /* Cho phép thanh cuộn dọc khi nội dung tràn */
+}
+
+.new-comment button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.new-comment button:hover {
+    background-color: #0056b3;
+}
+
+.new-comment button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
