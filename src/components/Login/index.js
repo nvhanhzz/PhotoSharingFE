@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "./styles.css";
-import { useNavigate, Link } from 'react-router-dom'; // Thêm import Link từ 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../../actions/Login';
 import { postLogin } from '../../services/AuthServices';
@@ -8,13 +8,20 @@ import { postLogin } from '../../services/AuthServices';
 const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const handleInputBlur = (event, setStateFunction) => {
+        const trimmedValue = event.target.value.trim();
+        setStateFunction(trimmedValue);
+    };
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        const res = await postLogin({ username, password });
-        if (res.message === 'Login success') {
+        const res = await postLogin({ email, password });
+        const json = await res.json();
+        // console.log(res, json);
+        if (res.status === 200) {
             dispatch(login());
             navigate("/");
         } else {
@@ -26,13 +33,15 @@ const LoginForm = () => {
         <div className='custom-form'>
             <form className="custom-login-form" onSubmit={handleLogin}>
                 <div className="custom-form-group">
-                    <label htmlFor="username">Username:</label>
+                    <label htmlFor="email">Email:</label> {/* Thay đổi label của username thành Email */}
                     <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
+                        type="email" // Thay đổi type của input thành text để hiển thị email
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setEmail)}
                         className="custom-form-control"
+                        required
                     />
                 </div>
                 <div className="custom-form-group">
@@ -41,8 +50,10 @@ const LoginForm = () => {
                         type="password"
                         id="password"
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setPassword)}
                         className="custom-form-control"
+                        required
                     />
                 </div>
                 <button type="submit" className="custom-btn custom-btn-primary">Login</button>

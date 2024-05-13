@@ -10,8 +10,11 @@ function UserDetail() {
 
   const getUser = async (id) => {
     const result = await getUserByID(id);
-    if (result) {
-      setUser(result);
+    const json = await result.json();
+    if (result.status === 200) {
+      setUser(json);
+    } else {
+      console.error(result.status);
     }
   }
 

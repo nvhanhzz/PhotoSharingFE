@@ -2,25 +2,32 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./styles.css";
 import { getPhotosOfUser } from "../../services/PhotoService";
+import { useSelector } from "react-redux";
 /**
  * Define UserPhotos, a React component of Project 4.
  */
 function UserPhotos() {
+  const upLoadPhoto = useSelector(state => state.upLoadPhoto);
   const { userId } = useParams();
   const [photos, setPhotos] = useState([]);
   useEffect(() => {
     const getUserPhoto = async (userID) => {
       const result = await getPhotosOfUser(userID);
-
-      if (result) {
-        console.log(result);
-        setPhotos(result);
+      const json = await result.json();
+      // console.log(json);
+      json.sort((a, b) => {
+        const dateA = new Date(a.date_time);
+        const dateB = new Date(b.date_time);
+        return dateB - dateA;
+      });
+      if (result.status === 200) {
+        setPhotos(json);
+      } else {
+        throw new error(result.status);
       }
-
-      return result;
     }
     getUserPhoto(userId);
-  }, [userId]);
+  }, [userId, upLoadPhoto]);
 
   return (
     <>
@@ -29,7 +36,7 @@ function UserPhotos() {
           <div className="content">
             <i>{item.date_time}</i>
             <div className="image">
-              <img src={"../images/" + item.file_name} />
+              <img src={item.file_name} />
             </div>
           </div>
           <div className="comments">

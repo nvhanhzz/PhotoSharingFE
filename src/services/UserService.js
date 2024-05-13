@@ -19,5 +19,7 @@ export const getUserByJwt = async () => {
     const result = await get(`${prefixUser}/jwt`);
     if (result) {
         return result;
+    } else {
+        console.log("1");
     }
 }

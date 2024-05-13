@@ -22,7 +22,12 @@ function UserList() {
   useEffect(() => {
     const getUserJwt = async () => {
       const result = await getUserByJwt();
-      setUserJwt(result);
+      const json = await result.json();
+      if (result.status === 200) {
+        setUserJwt(result.data);
+      } else {
+        // console.error(result.status);
+      }
     }
     getUserJwt();
   }, [login]);
@@ -30,10 +35,12 @@ function UserList() {
   useEffect(() => {
     const getListUser = async () => {
       const result = await getAllUsers();
-      if (result.error) {
-        navigate("/");
+      const json = await result.json();
+      if (result.status === 200) {
+        setUsers(json);
       } else {
-        setUsers(result);
+        navigate("/");
+        // console.error(result.status);
       }
     }
     getListUser();

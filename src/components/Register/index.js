@@ -7,13 +7,19 @@ import { postRegister } from '../../services/AuthServices';
 const RegisterForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState(''); // Thêm state cho confirmPassword
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [firstname, setFirstName] = useState('');
     const [lastname, setLastName] = useState('');
     const [location, setLocation] = useState('');
     const [occupation, setOccupation] = useState('');
+    const [description, setDescription] = useState('');
+
+    const handleInputBlur = (event, setStateFunction) => {
+        const trimmedValue = event.target.value.trim();
+        setStateFunction(trimmedValue);
+    };
 
     const handleRegister = async (event) => {
         event.preventDefault();
@@ -21,14 +27,18 @@ const RegisterForm = () => {
             alert("Passwords do not match");
             return;
         }
-        const res = await postRegister({ username, password, firstname, lastname, location, occupation });
-        if (res.message === 'User registered successfully') {
+        const res = await postRegister({ email, password, firstname, lastname, location, occupation, description });
+        const json = await res.json();
+        // console.log(json);
+
+        if (res.status === 201) {
             alert("Register success !");
             navigate("/");
-        } else if (res.message === 'Username already exists') {
-            alert("Username already exists !");
+        } else if (res.status === 400 && json.message === 'Email already exists') {
+            alert("Email already exists !");
+            console.error(res.status);
         } else {
-            alert("Error !");
+            console.error(res.status);
         }
     };
 
@@ -36,12 +46,13 @@ const RegisterForm = () => {
         <div className='register-form'>
             <form className="register-form__form" onSubmit={handleRegister}>
                 <div className="register-form__form-group">
-                    <label htmlFor="username" className="register-form__label">Username:</label>
+                    <label htmlFor="email" className="register-form__label">Email:</label>
                     <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setEmail)}
                         className="register-form__input-field"
                         required
                     />
@@ -52,7 +63,8 @@ const RegisterForm = () => {
                         type="password"
                         id="password"
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setPassword)}
                         className="register-form__input-field"
                         required
                     />
@@ -63,7 +75,8 @@ const RegisterForm = () => {
                         type="password"
                         id="confirmPassword"
                         value={confirmPassword}
-                        onChange={(event) => setConfirmPassword(event.target.value)}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setConfirmPassword)}
                         className="register-form__input-field"
                         required
                     />
@@ -74,7 +87,8 @@ const RegisterForm = () => {
                         type="text"
                         id="first_name"
                         value={firstname}
-                        onChange={(event) => setFirstName(event.target.value)}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setFirstName)}
                         className="register-form__input-field"
                         required
                     />
@@ -85,7 +99,8 @@ const RegisterForm = () => {
                         type="text"
                         id="last_name"
                         value={lastname}
-                        onChange={(event) => setLastName(event.target.value)}
+                        onChange={(e) => setLastName(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setLastName)}
                         className="register-form__input-field"
                         required
                     />
@@ -96,7 +111,8 @@ const RegisterForm = () => {
                         type="text"
                         id="location"
                         value={location}
-                        onChange={(event) => setLocation(event.target.value)}
+                        onChange={(e) => setLocation(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setLocation)}
                         className="register-form__input-field"
                     />
                 </div>
@@ -106,11 +122,24 @@ const RegisterForm = () => {
                         type="text"
                         id="occupation"
                         value={occupation}
-                        onChange={(event) => setOccupation(event.target.value)}
+                        onChange={(e) => setOccupation(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setOccupation)}
                         className="register-form__input-field"
                     />
                 </div>
-                <button type="submit" className="register-form__btn register-form__btn--primary">Register</button>
+                <div className="register-form__form-group">
+                    <label htmlFor="description" className="register-form__label">Description:</label>
+                    <textarea
+                        id="description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        onBlur={(event) => handleInputBlur(event, setDescription)}
+                        className="register-form__input-field"
+                    />
+                </div>
+                <div className='outer-button'>
+                    <button type="submit" className="register-form__btn register-form__btn--primary">Register</button>
+                </div>
             </form>
         </div>
     );

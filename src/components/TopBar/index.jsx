@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { Navigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { getUserByID, getUserByJwt } from "../../services/UserService";
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import "./styles.css";
-import { postLogout } from "../../services/AuthServices";
-import { logout } from "../../actions/Login";
+import Logout from "../Logout";
+import PhotoUploader from "../PhotoUploader";
 import { useNavigate } from "react-router-dom";
 
 function TopBar() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [userJwt, setUserJwt] = useState("Please login !");
   const [user, setUser] = useState();
 
@@ -22,7 +21,13 @@ function TopBar() {
   useEffect(() => {
     const getUser = async (id) => {
       const result = await getUserByID(id);
-      setUser(result);
+      const json = await result.json();
+      // console.log(json);
+      if (result.status === 200) {
+        setUser(json);
+      } else {
+        console.error(result.status);
+      }
     }
     if (userId) {
       getUser(userId);
@@ -32,10 +37,13 @@ function TopBar() {
   useEffect(() => {
     const getUserJwt = async () => {
       const result = await getUserByJwt();
-      if (result.first_name) {
-        setUserJwt(`Hi ${result.first_name} !`);
-      } else {
-        setUserJwt(`Please login !`);
+      const json = await result.json();
+      if (result.status === 200) {
+        if (json._id) {
+          setUserJwt(`Hi ${json.first_name} !`);
+        } else {
+          setUserJwt("Please login !");
+        }
       }
     }
     getUserJwt();
@@ -50,14 +58,6 @@ function TopBar() {
       context = `Photos of ${user.first_name} ${user.last_name}`;
     }
   }
-
-  const handleLogout = () => {
-    const Logout = async () => {
-      const result = await postLogout();
-      dispatch(logout());
-    }
-    Logout();
-  };
 
   const handleNavigate = () => {
     navigate("/");
@@ -74,7 +74,10 @@ function TopBar() {
           {context}
         </Typography>
         {(userJwt !== "Please login !") ?
-          <Button color="inherit" onClick={handleLogout}>Log out</Button>
+          <>
+            <PhotoUploader />
+            <Logout />
+          </>
           : <></>
         }
       </Toolbar>

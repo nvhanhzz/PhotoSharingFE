@@ -18,9 +18,14 @@ const App = () => {
 
   useEffect(() => {
     const getUserJwt = async () => {
-      const result = await getUserByJwt();
-      setUserJwt(result);
-      // console.log(login, result);
+      try {
+        // console.log(login);
+        const result = await getUserByJwt();
+        const json = await result.json();
+        setUserJwt(json);
+      } catch (error) {
+        setUserJwt(null);
+      }
     }
     getUserJwt();
   }, [login]);
@@ -34,7 +39,7 @@ const App = () => {
           </Grid>
           <div className="main-topbar-buffer" />
 
-          {userJwt && userJwt.first_name ? (
+          {userJwt && userJwt._id ? (
             <>
               <Grid item sm={3}>
                 <Paper className="main-grid-item">
@@ -46,6 +51,7 @@ const App = () => {
                   <Routes>
                     <Route path="/users/:userId" element={<UserDetail />} />
                     <Route path="/photos/:userId" element={<UserPhotos />} />
+                    <Route path="*" element={<Home />} />
                   </Routes>
                 </Paper>
               </Grid>
@@ -54,6 +60,7 @@ const App = () => {
               <Routes>
                 <Route path="/register" element={<RegisterForm />} />
                 <Route path="/" element={<Login />} />
+                <Route path="*" element={<Login />} />
               </Routes>
             </>
           )}
